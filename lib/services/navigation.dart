@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../common/colors.dart';
-import '../widgets/widgets.dart';
+import '../widgets/all.dart';
 
 class Navigation {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
