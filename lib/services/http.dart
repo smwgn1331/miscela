@@ -80,5 +80,5 @@ class Http {
     return handler.next(e);
   }
 
-  Dio get http => _http;
+  Dio get client => _http;
 }
