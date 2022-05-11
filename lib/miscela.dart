@@ -2,9 +2,7 @@ library miscela;
 
 import 'package:get_it/get_it.dart';
 
-import 'config/http.dart';
-import 'services/navigation.dart';
-import 'services/storage.dart';
+import 'modules.dart';
 
 class Miscela {
   static GetIt svc = GetIt.I;
