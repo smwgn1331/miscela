@@ -18,14 +18,18 @@ class MxLog {
   static info(String msg, {String? name}) {
     if (kDebugMode) {
       developer.log(
-        "$_blue[${name ?? 'INFO'}] $msg$_reset",
+        "$_blue${name != null ? '[$name]' : ''} $msg$_reset",
+        name: "INFO",
       );
     }
   }
 
   static error(String msg, {String? name}) {
     if (kDebugMode) {
-      developer.log("$_yellow$msg$_reset");
+      developer.log(
+        "$_yellow${name != null ? '[$name]' : ''} $msg$_reset",
+        name: "ERROR",
+      );
     }
   }
 }
