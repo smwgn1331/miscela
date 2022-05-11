@@ -48,4 +48,8 @@ class Navigation {
                           )
                     ],
               ));
+
+  static parseRoutes(Map<String, dynamic> routes) =>
+      routes.map<String, Widget Function(BuildContext)>(
+          (key, value) => MapEntry(key, (context) => value));
 }
