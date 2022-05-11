@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-import '../reactive/rx.dart';
+import '../reactive/target.dart';
+import '../reactive/types.dart';
 
 class RxWrapper<T> extends StatefulWidget {
   const RxWrapper({
