@@ -15,7 +15,7 @@ class MxButton extends StatefulWidget {
     this.spinnerBackgroundColor,
     this.prefixIconColor,
     this.color,
-    this.fluid = true,
+    this.fluid = false,
   }) : super(key: key);
   final String label;
   final RxTarget<bool>? disabled, loadingIcon;
@@ -36,22 +36,55 @@ class _MxButtonState extends State<MxButton> {
   late bool disabled, loadingIcon;
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: widget.fluid ? MainAxisSize.max : MainAxisSize.min,
-        children: [
-          loadingIcon
-              ? const SizedBox(
-                  width: 20, height: 20, child: CircularProgressIndicator())
-              : widget.prefixIcon != null
-                  ? Icon(widget.prefixIcon)
-                  : const SizedBox(),
-          Text(widget.label),
-          const SizedBox()
-        ],
+    return InkWell(
+      child: Opacity(
+        opacity: widget.disabled?.value == true ? 0.65 : 1,
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              color: widget.backgroundColor ??
+                  Theme.of(context).colorScheme.primary,
+              borderRadius: BorderRadius.circular(5)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: widget.fluid ? MainAxisSize.max : MainAxisSize.min,
+            children: [
+              loadingIcon
+                  ? Container(
+                      margin: const EdgeInsets.only(right: 7),
+                      width: 13,
+                      height: 13,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1,
+                        color: widget.color ??
+                            Theme.of(context).colorScheme.onPrimary,
+                      ))
+                  : widget.prefixIcon != null
+                      ? Container(
+                          child: Icon(widget.prefixIcon,
+                              size: 13,
+                              color: widget.color ??
+                                  Theme.of(context).colorScheme.onPrimary),
+                          width: 13,
+                          height: 13,
+                          margin: const EdgeInsets.only(right: 7))
+                      : Container(),
+              Text(
+                widget.label,
+                style: TextStyle(
+                    color: widget.color ??
+                        Theme.of(context).colorScheme.onPrimary),
+              ),
+              if (widget.fluid)
+                Container(
+                    width: 13,
+                    height: 13,
+                    margin: const EdgeInsets.only(left: 7))
+            ],
+          ),
+        ),
       ),
-      onPressed: widget.onPressed,
+      onTap: widget.disabled?.value == true ? null : widget.onPressed,
     );
   }
 
