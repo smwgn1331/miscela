@@ -55,10 +55,9 @@ class _MxButtonState extends State<MxButton> {
                       width: 13,
                       height: 13,
                       child: CircularProgressIndicator(
-                        strokeWidth: 1,
-                        color: widget.color ??
-                            Theme.of(context).colorScheme.onPrimary,
-                      ))
+                          strokeWidth: 1,
+                          color: widget.color ??
+                              Theme.of(context).colorScheme.onPrimary))
                   : widget.prefixIcon != null
                       ? Container(
                           child: Icon(widget.prefixIcon,
@@ -69,12 +68,10 @@ class _MxButtonState extends State<MxButton> {
                           height: 13,
                           margin: const EdgeInsets.only(right: 7))
                       : Container(),
-              Text(
-                widget.label,
-                style: TextStyle(
-                    color: widget.color ??
-                        Theme.of(context).colorScheme.onPrimary),
-              ),
+              Text(widget.label,
+                  style: TextStyle(
+                      color: widget.color ??
+                          Theme.of(context).colorScheme.onPrimary)),
               if (widget.fluid)
                 Container(
                     width: 13,
