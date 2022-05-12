@@ -7,10 +7,16 @@ import 'services/storage.dart';
 class Miscela {
   static GetIt svc = GetIt.I;
 
-  static registerServices({required String httpBaseUrl}) {
-    svc.registerSingleton<HttpConfig>(HttpConfig(httpBaseUrl));
-    svc.registerSingleton<Storage>(Storage());
+  static requireNavigation() {
     svc.registerSingleton<Navigation>(Navigation());
+  }
+
+  static requireStorage() {
+    svc.registerSingleton<Storage>(Storage());
+  }
+
+  static requireHttp(String baseUrl) {
+    svc.registerSingleton<HttpConfig>(HttpConfig(baseUrl));
   }
 
   static push<T extends Object>(T service) {
