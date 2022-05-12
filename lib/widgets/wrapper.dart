@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 import '../reactive/target.dart';
 import '../reactive/types.dart';
 
-class RxWrapper<T> extends StatefulWidget {
-  const RxWrapper({
+class MxWrapper<T> extends StatefulWidget {
+  const MxWrapper({
     Key? key,
     required this.rxTarget,
     required this.builder,
@@ -15,10 +15,10 @@ class RxWrapper<T> extends StatefulWidget {
   final RxWidgetBuilder<T> builder;
 
   @override
-  State<StatefulWidget> createState() => _RxWrapperState<T>();
+  State<StatefulWidget> createState() => _MxWrapperState<T>();
 }
 
-class _RxWrapperState<T> extends State<RxWrapper<T>> {
+class _MxWrapperState<T> extends State<MxWrapper<T>> {
   late T value;
 
   @override
@@ -34,7 +34,7 @@ class _RxWrapperState<T> extends State<RxWrapper<T>> {
   }
 
   @override
-  void didUpdateWidget(RxWrapper<T> oldWidget) {
+  void didUpdateWidget(MxWrapper<T> oldWidget) {
     if (oldWidget.rxTarget != widget.rxTarget) {
       oldWidget.rxTarget.removeSubscriber(_valueChanged);
       value = widget.rxTarget.value;

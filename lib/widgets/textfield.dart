@@ -6,8 +6,8 @@ import '../common/colors.dart';
 import '../reactive/target.dart';
 import 'wrapper.dart';
 
-class TextInput extends StatefulWidget {
-  const TextInput({
+class MxTextField extends StatefulWidget {
+  const MxTextField({
     Key? key,
     required this.label,
     required this.controller,
@@ -33,49 +33,12 @@ class TextInput extends StatefulWidget {
   final IconData? prefixIcon;
 
   @override
-  State<StatefulWidget> createState() => _TextInputState();
+  State<StatefulWidget> createState() => _MxTextFieldState();
 }
 
-class _TextInputState extends State<TextInput> {
+class _MxTextFieldState extends State<MxTextField> {
   late String errorText;
   late bool masked, disabled;
-
-  @override
-  void initState() {
-    super.initState();
-    errorText = widget.errorText.value;
-    disabled = widget.disabled?.value ?? false;
-    masked = widget.obscureText;
-    widget.errorText.addSubscriber(_errorTextChanged);
-    widget.disabled?.addSubscriber(_disabledChanged);
-  }
-
-  @override
-  void didUpdateWidget(TextInput oldWidget) {
-    if (oldWidget.errorText != widget.errorText) {
-      oldWidget.errorText.removeSubscriber(_errorTextChanged);
-      errorText = widget.errorText.value;
-      widget.errorText.addSubscriber(_errorTextChanged);
-    }
-    if (oldWidget.disabled != widget.disabled) {
-      oldWidget.disabled?.removeSubscriber(_disabledChanged);
-      disabled = widget.disabled?.value ?? false;
-      widget.disabled?.addSubscriber(_errorTextChanged);
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void dispose() {
-    widget.errorText.removeSubscriber(_errorTextChanged);
-    widget.disabled?.removeSubscriber(_disabledChanged);
-    super.dispose();
-  }
-
-  void _errorTextChanged() =>
-      setState(() => errorText = widget.errorText.value);
-  void _disabledChanged() =>
-      setState(() => disabled = widget.disabled?.value ?? false);
 
   @override
   build(BuildContext context) {
@@ -183,9 +146,6 @@ class _TextInputState extends State<TextInput> {
                               ? Theme.of(context).colorScheme.primary
                               : MxColors.red[600])
                       : null,
-                  // prefixIconColor: widget.errorText.value.isEmpty
-                  //     ? Theme.of(context).colorScheme.primary
-                  //     : MxColors.red[600],
                   disabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.transparent)),
                   enabledBorder: const OutlineInputBorder(
@@ -197,7 +157,7 @@ class _TextInputState extends State<TextInput> {
                 ),
               ),
             ),
-            RxWrapper(
+            MxWrapper(
               rxTarget: widget.errorText,
               builder: (context, val) => Text(errorText.capitalizeFirst,
                   style: TextStyle(
@@ -210,4 +170,41 @@ class _TextInputState extends State<TextInput> {
       ),
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    errorText = widget.errorText.value;
+    disabled = widget.disabled?.value ?? false;
+    masked = widget.obscureText;
+    widget.errorText.addSubscriber(_errorTextChanged);
+    widget.disabled?.addSubscriber(_disabledChanged);
+  }
+
+  @override
+  void didUpdateWidget(MxTextField oldWidget) {
+    if (oldWidget.errorText != widget.errorText) {
+      oldWidget.errorText.removeSubscriber(_errorTextChanged);
+      errorText = widget.errorText.value;
+      widget.errorText.addSubscriber(_errorTextChanged);
+    }
+    if (oldWidget.disabled != widget.disabled) {
+      oldWidget.disabled?.removeSubscriber(_disabledChanged);
+      disabled = widget.disabled?.value ?? false;
+      widget.disabled?.addSubscriber(_errorTextChanged);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    widget.errorText.removeSubscriber(_errorTextChanged);
+    widget.disabled?.removeSubscriber(_disabledChanged);
+    super.dispose();
+  }
+
+  void _errorTextChanged() =>
+      setState(() => errorText = widget.errorText.value);
+  void _disabledChanged() =>
+      setState(() => disabled = widget.disabled?.value ?? false);
 }
