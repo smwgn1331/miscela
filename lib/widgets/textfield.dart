@@ -113,8 +113,8 @@ class _MxTextFieldState extends State<MxTextField> {
                                   () => masked = !masked), // button pressed
                               child: Icon(
                                   masked != true
-                                      ? MdiIcons.eye
-                                      : MdiIcons.eyeOff,
+                                      ? MdiIcons.eyeOff
+                                      : MdiIcons.eye,
                                   color: widget.errorText.value.isNotEmpty
                                       ? MxColors.red[600]
                                       : Theme.of(context).colorScheme.primary),
