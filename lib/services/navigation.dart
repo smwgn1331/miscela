@@ -25,19 +25,28 @@ class Navigation {
       Navigator.of(navigatorKey.currentState!.context).pushNamedAndRemoveUntil(
           path, (route) => false,
           arguments: arguments);
-
-  Future showModal(
+  Future showModal(BuildContext context,
           {Text? title,
           AlertDialog? dialog,
           Widget? content,
           List<Widget>? actions,
           MxButton? confirmButton,
-          IconData? confirmIcon,
+          String? confirmButtonText,
+          TextStyle? confirmButtonTextStyle,
+          IconData? confirmButtonIcon,
+          Color? confirmButtonBackgroundColor,
+          Color? confirmButtonColor,
           MxButton? cancelButton,
-          IconData? cancelIcon,
+          String? cancelButtonText,
+          TextStyle? cancelButtonTextStyle,
+          IconData? cancelButtonIcon,
+          Color? cancelButtonBackgroundColor,
+          Color? cancelButtonColor,
+          bool hideCancelButton = false,
+          bool hideConfirmButton = false,
           bool backgroundDismiss = true}) async =>
       showDialog(
-          context: navigatorKey.currentState!.context,
+          context: context,
           builder: (ctx) =>
               dialog ??
               AlertDialog(
@@ -45,16 +54,26 @@ class Navigation {
                 content: content,
                 actions: actions ??
                     [
-                      if (cancelButton != null) cancelButton,
-                      confirmButton ??
-                          MxButton(
-                            label: "Ok",
-                            prefixIcon: confirmIcon,
-                            fluid: false,
-                            backgroundColor: MxColors.indigo[500],
-                            color: MxColors.white,
-                            onPressed: back,
-                          )
+                      if (!hideCancelButton)
+                        cancelButton ??
+                            MxButton(
+                                label: cancelButtonText ?? "Cancel",
+                                style: cancelButtonTextStyle,
+                                backgroundColor: cancelButtonBackgroundColor ??
+                                    Theme.of(context).colorScheme.secondary,
+                                color: cancelButtonColor,
+                                prefixIcon: cancelButtonIcon,
+                                onPressed: () => back(result: false)),
+                      if (!hideConfirmButton)
+                        confirmButton ??
+                            MxButton(
+                                label: confirmButtonText ?? "Confirm",
+                                style: confirmButtonTextStyle,
+                                backgroundColor: confirmButtonBackgroundColor ??
+                                    Theme.of(context).colorScheme.primary,
+                                color: confirmButtonColor,
+                                prefixIcon: confirmButtonIcon,
+                                onPressed: () => back(result: true))
                     ],
               ));
 
