@@ -10,6 +10,10 @@ class Navigation {
       Navigator.of(navigatorKey.currentState!.context)
           .pushNamed(path, arguments: arguments);
 
+  Future toPage(Widget page) async =>
+      Navigator.of(navigatorKey.currentState!.context)
+          .push(MaterialPageRoute(builder: (context) => page));
+
   back({dynamic result}) =>
       Navigator.of(navigatorKey.currentState!.context).pop(result ?? false);
 
