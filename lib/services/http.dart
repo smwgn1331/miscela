@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 
 import '../common/logger.dart';
 import '../config/http.dart';
-import '../core.dart';
+import '../core/miscela.dart';
 import '../widgets/button.dart';
 import 'navigation.dart';
 import 'storage.dart';
