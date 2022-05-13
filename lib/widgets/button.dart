@@ -71,9 +71,10 @@ class _MxButtonState extends State<MxButton> {
                           margin: const EdgeInsets.only(right: 7))
                       : Container(),
               Text(widget.label,
-                  style: TextStyle(
-                      color: widget.color ??
-                          Theme.of(context).colorScheme.onPrimary)),
+                  style: widget.style ??
+                      TextStyle(
+                          color: widget.color ??
+                              Theme.of(context).colorScheme.onPrimary)),
               if (widget.fluid)
                 Container(
                     width: 13,
