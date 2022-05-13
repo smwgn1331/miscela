@@ -32,6 +32,9 @@ class Navigation {
           Widget? content,
           List<Widget>? actions,
           MxButton? confirmButton,
+          IconData? confirmIcon,
+          MxButton? cancelButton,
+          IconData? cancelIcon,
           bool backgroundDismiss = true}) async =>
       showDialog(
           context: navigatorKey.currentState!.context,
@@ -42,9 +45,11 @@ class Navigation {
                 content: content,
                 actions: actions ??
                     [
+                      if (cancelButton != null) cancelButton,
                       confirmButton ??
                           MxButton(
                             label: "Ok",
+                            prefixIcon: confirmIcon,
                             fluid: false,
                             backgroundColor: MxColors.indigo[500],
                             color: MxColors.white,
