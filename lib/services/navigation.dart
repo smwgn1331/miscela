@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../common/colors.dart';
 import '../widgets/all.dart';
 
 class Navigation {
@@ -25,7 +24,7 @@ class Navigation {
       Navigator.of(navigatorKey.currentState!.context).pushNamedAndRemoveUntil(
           path, (route) => false,
           arguments: arguments);
-  Future showModal(BuildContext context,
+  Future showModal(
           {Text? title,
           AlertDialog? dialog,
           Widget? content,
@@ -46,7 +45,6 @@ class Navigation {
           bool hideConfirmButton = false,
           bool backgroundDismiss = true}) async =>
       showDialog(
-          context: context,
           builder: (ctx) =>
               dialog ??
               AlertDialog(
@@ -60,7 +58,9 @@ class Navigation {
                                 label: cancelButtonText ?? "Cancel",
                                 style: cancelButtonTextStyle,
                                 backgroundColor: cancelButtonBackgroundColor ??
-                                    Theme.of(context).colorScheme.secondary,
+                                    Theme.of(navigatorKey.currentState!.context)
+                                        .colorScheme
+                                        .secondary,
                                 color: cancelButtonColor,
                                 prefixIcon: cancelButtonIcon,
                                 onPressed: () => back(result: false)),
@@ -70,12 +70,15 @@ class Navigation {
                                 label: confirmButtonText ?? "Confirm",
                                 style: confirmButtonTextStyle,
                                 backgroundColor: confirmButtonBackgroundColor ??
-                                    Theme.of(context).colorScheme.primary,
+                                    Theme.of(navigatorKey.currentState!.context)
+                                        .colorScheme
+                                        .primary,
                                 color: confirmButtonColor,
                                 prefixIcon: confirmButtonIcon,
                                 onPressed: () => back(result: true))
                     ],
-              ));
+              ),
+          context: navigatorKey.currentState!.context);
 
   static parseRoutes(Map<String, dynamic> routes) =>
       routes.map<String, Widget Function(BuildContext)>(
