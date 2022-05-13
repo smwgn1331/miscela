@@ -16,8 +16,10 @@ class MxButton extends StatefulWidget {
     this.prefixIconColor,
     this.color,
     this.fluid = false,
+    this.style,
   }) : super(key: key);
   final String label;
+  final TextStyle? style;
   final RxTarget<bool>? disabled, loadingIcon;
   final VoidCallback onPressed;
   final Color? backgroundColor,
