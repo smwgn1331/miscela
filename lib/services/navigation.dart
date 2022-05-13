@@ -33,12 +33,14 @@ class Navigation {
           String? confirmButtonText,
           TextStyle? confirmButtonTextStyle,
           IconData? confirmButtonIcon,
+          Color? confirmButtonIconColor,
           Color? confirmButtonBackgroundColor,
           Color? confirmButtonColor,
           MxButton? cancelButton,
           String? cancelButtonText,
           TextStyle? cancelButtonTextStyle,
           IconData? cancelButtonIcon,
+          Color? cancelButtonIconColor,
           Color? cancelButtonBackgroundColor,
           Color? cancelButtonColor,
           bool hideCancelButton = false,
@@ -56,7 +58,7 @@ class Navigation {
                         cancelButton ??
                             MxButton(
                                 label: cancelButtonText ?? "Cancel",
-                                style: cancelButtonTextStyle,
+                                textStyle: cancelButtonTextStyle,
                                 backgroundColor: cancelButtonBackgroundColor ??
                                     Theme.of(navigatorKey.currentState!.context)
                                         .colorScheme
@@ -68,12 +70,13 @@ class Navigation {
                         confirmButton ??
                             MxButton(
                                 label: confirmButtonText ?? "Confirm",
-                                style: confirmButtonTextStyle,
+                                textStyle: confirmButtonTextStyle,
                                 backgroundColor: confirmButtonBackgroundColor ??
                                     Theme.of(navigatorKey.currentState!.context)
                                         .colorScheme
                                         .primary,
                                 color: confirmButtonColor,
+                                iconColor: confirmButtonIconColor,
                                 prefixIcon: confirmButtonIcon,
                                 onPressed: () => back(result: true))
                     ],
