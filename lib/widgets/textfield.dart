@@ -20,6 +20,7 @@ class MxTextField extends StatefulWidget {
     this.textInputAction,
     this.disabled,
     this.prefixIcon,
+    this.autofocus = false,
   }) : super(key: key);
   final RxTarget<String> errorText;
   final RxTarget<bool>? disabled;
@@ -29,7 +30,7 @@ class MxTextField extends StatefulWidget {
   final TextInputType? textInputType;
   final TextInputAction? textInputAction;
   final String label;
-  final bool obscureText;
+  final bool obscureText, autofocus;
   final IconData? prefixIcon;
 
   @override
@@ -74,6 +75,7 @@ class _MxTextFieldState extends State<MxTextField> {
                           color: Color.fromRGBO(0, 0, 0, 0.1)),
                   ]),
               child: TextField(
+                autofocus: widget.autofocus,
                 controller: widget.controller,
                 keyboardType: widget.textInputType,
                 textInputAction: widget.textInputAction,
