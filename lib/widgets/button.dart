@@ -16,17 +16,19 @@ class MxButton extends StatefulWidget {
     this.prefixIconColor,
     this.color,
     this.fluid = false,
-    this.style,
+    this.textStyle,
+    this.iconColor,
   }) : super(key: key);
   final String label;
-  final TextStyle? style;
+  final TextStyle? textStyle;
   final RxTarget<bool>? disabled, loadingIcon;
   final VoidCallback onPressed;
   final Color? backgroundColor,
       spinnerActiveColor,
       spinnerBackgroundColor,
       prefixIconColor,
-      color;
+      color,
+      iconColor;
   final IconData? prefixIcon;
   final bool fluid;
 
@@ -58,20 +60,22 @@ class _MxButtonState extends State<MxButton> {
                       height: 13,
                       child: CircularProgressIndicator(
                           strokeWidth: 1,
-                          color: widget.color ??
+                          color: widget.iconColor ??
+                              widget.color ??
                               Theme.of(context).colorScheme.onPrimary))
                   : widget.prefixIcon != null
                       ? Container(
                           child: Icon(widget.prefixIcon,
                               size: 13,
-                              color: widget.color ??
+                              color: widget.iconColor ??
+                                  widget.color ??
                                   Theme.of(context).colorScheme.onPrimary),
                           width: 13,
                           height: 13,
                           margin: const EdgeInsets.only(right: 7))
                       : Container(),
               Text(widget.label,
-                  style: widget.style ??
+                  style: widget.textStyle ??
                       TextStyle(
                           color: widget.color ??
                               Theme.of(context).colorScheme.onPrimary)),
