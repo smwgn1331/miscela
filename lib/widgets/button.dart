@@ -77,6 +77,7 @@ class _MxButtonState extends State<MxButton> {
               Text(widget.label,
                   style: widget.textStyle ??
                       TextStyle(
+                          fontWeight: FontWeight.bold,
                           color: widget.color ??
                               Theme.of(context).colorScheme.onPrimary)),
               if (widget.fluid)
