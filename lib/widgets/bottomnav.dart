@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:miscela/miscela.dart';
+
+import '../core/all.dart';
+import '../reactive/all.dart';
 
 class MxBottomNavigationBar extends StatelessWidget {
   const MxBottomNavigationBar({
