@@ -9,9 +9,9 @@ import 'wrapper.dart';
 class MxTextField extends StatefulWidget {
   const MxTextField({
     Key? key,
-    required this.label,
     required this.controller,
-    required this.errorText,
+    this.label,
+    this.errorText,
     this.onChanged,
     this.onSubmitted,
     this.obscureText = false,
