@@ -38,7 +38,7 @@ class MxTextField extends StatefulWidget {
 }
 
 class _MxTextFieldState extends State<MxTextField> {
-  late String errorText;
+  String errorText = "";
   late bool masked, disabled;
 
   @override
@@ -84,7 +84,9 @@ class _MxTextFieldState extends State<MxTextField> {
                 onSubmitted: widget.onSubmitted,
                 obscureText: masked,
                 enabled: !disabled,
-                cursorColor: errorText.isNotEmpty ? MxColors.red[600] : null,
+                cursorColor: widget.errorText?.value.isNotEmpty == true
+                    ? MxColors.red[600]
+                    : null,
                 decoration: InputDecoration(
                   enabled: widget.disabled?.value != true,
                   isDense: true,
