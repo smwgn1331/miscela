@@ -22,14 +22,14 @@ class MxTextField extends StatefulWidget {
     this.prefixIcon,
     this.autofocus = false,
   }) : super(key: key);
-  final RxTarget<String> errorText;
+  final RxTarget<String>? errorText;
   final RxTarget<bool>? disabled;
   final ValueSetter? onChanged, onSubmitted;
   final ValueSetter? toggleVisible;
   final TextEditingController controller;
   final TextInputType? textInputType;
   final TextInputAction? textInputAction;
-  final String label;
+  final String? label;
   final bool obscureText, autofocus;
   final IconData? prefixIcon;
 
@@ -51,22 +51,23 @@ class _MxTextFieldState extends State<MxTextField> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              widget.label,
-              style: TextStyle(
-                  fontWeight: FontWeight.w600, color: MxColors.slate[500]),
-            ),
+            if (widget.label != null)
+              Text(
+                widget.label!,
+                style: TextStyle(
+                    fontWeight: FontWeight.w600, color: MxColors.slate[500]),
+              ),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 7),
               decoration: BoxDecoration(
                   border: Border.all(
                       width: 2,
-                      color: widget.errorText.value.isNotEmpty
+                      color: widget.errorText?.value.isNotEmpty == true
                           ? (MxColors.red[600])!
                           : Colors.transparent),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
-                    if (widget.errorText.value.isEmpty)
+                    if (widget.errorText?.value.isEmpty == true)
                       const BoxShadow(
                           offset: Offset(0, 0),
                           blurRadius: 2,
@@ -92,7 +93,7 @@ class _MxTextFieldState extends State<MxTextField> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (widget.errorText.value.isNotEmpty)
+                      if (widget.errorText?.value.isNotEmpty == true)
                         Container(
                             width: 24,
                             height: 24,
@@ -117,7 +118,8 @@ class _MxTextFieldState extends State<MxTextField> {
                                   masked != true
                                       ? MdiIcons.eyeOff
                                       : MdiIcons.eye,
-                                  color: widget.errorText.value.isNotEmpty
+                                  color: widget.errorText?.value.isNotEmpty ==
+                                          true
                                       ? MxColors.red[600]
                                       : Theme.of(context).colorScheme.primary),
                             )))),
@@ -136,7 +138,8 @@ class _MxTextFieldState extends State<MxTextField> {
                               }
                             }, // button pressed
                             child: Icon(MdiIcons.close,
-                                color: widget.errorText.value.isNotEmpty
+                                color: widget.errorText?.value.isNotEmpty ==
+                                        true
                                     ? MxColors.red[600]
                                     : Theme.of(context).colorScheme.primary),
                           )))),
@@ -144,7 +147,7 @@ class _MxTextFieldState extends State<MxTextField> {
                   ),
                   prefixIcon: widget.prefixIcon != null
                       ? Icon(widget.prefixIcon,
-                          color: widget.errorText.value.isEmpty
+                          color: widget.errorText?.value.isEmpty == true
                               ? Theme.of(context).colorScheme.primary
                               : MxColors.red[600])
                       : null,
@@ -159,14 +162,15 @@ class _MxTextFieldState extends State<MxTextField> {
                 ),
               ),
             ),
-            MxWrapper(
-              rxTarget: widget.errorText,
-              builder: (context, val) => Text(errorText.capitalizeFirst,
-                  style: TextStyle(
-                      color: MxColors.red[600],
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12)),
-            ),
+            if (widget.errorText != null)
+              MxWrapper(
+                rxTarget: widget.errorText!,
+                builder: (context, val) => Text(errorText.capitalizeFirst,
+                    style: TextStyle(
+                        color: MxColors.red[600],
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12)),
+              ),
           ],
         ),
       ),
@@ -176,19 +180,23 @@ class _MxTextFieldState extends State<MxTextField> {
   @override
   void initState() {
     super.initState();
-    errorText = widget.errorText.value;
+    if (widget.errorText != null) {
+      errorText = widget.errorText!.value;
+      widget.errorText!.addSubscriber(_errorTextChanged);
+    }
     disabled = widget.disabled?.value ?? false;
     masked = widget.obscureText;
-    widget.errorText.addSubscriber(_errorTextChanged);
     widget.disabled?.addSubscriber(_disabledChanged);
   }
 
   @override
   void didUpdateWidget(MxTextField oldWidget) {
-    if (oldWidget.errorText != widget.errorText) {
-      oldWidget.errorText.removeSubscriber(_errorTextChanged);
-      errorText = widget.errorText.value;
-      widget.errorText.addSubscriber(_errorTextChanged);
+    if (widget.errorText != null) {
+      if (oldWidget.errorText != widget.errorText) {
+        oldWidget.errorText!.removeSubscriber(_errorTextChanged);
+        errorText = widget.errorText!.value;
+        widget.errorText!.addSubscriber(_errorTextChanged);
+      }
     }
     if (oldWidget.disabled != widget.disabled) {
       oldWidget.disabled?.removeSubscriber(_disabledChanged);
@@ -200,13 +208,19 @@ class _MxTextFieldState extends State<MxTextField> {
 
   @override
   void dispose() {
-    widget.errorText.removeSubscriber(_errorTextChanged);
+    if (widget.errorText != null) {
+      widget.errorText!.removeSubscriber(_errorTextChanged);
+    }
     widget.disabled?.removeSubscriber(_disabledChanged);
     super.dispose();
   }
 
-  void _errorTextChanged() =>
-      setState(() => errorText = widget.errorText.value);
+  void _errorTextChanged() {
+    if (widget.errorText != null) {
+      setState(() => errorText = widget.errorText!.value);
+    }
+  }
+
   void _disabledChanged() =>
       setState(() => disabled = widget.disabled?.value ?? false);
 }
