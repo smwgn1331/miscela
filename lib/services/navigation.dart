@@ -52,6 +52,7 @@ class Navigation {
               AlertDialog(
                 title: title,
                 content: content,
+                contentPadding: const EdgeInsets.all(0.0),
                 actions: actions ??
                     [
                       if (!hideCancelButton)
