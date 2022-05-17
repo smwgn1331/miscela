@@ -3,6 +3,7 @@ export 'button.dart';
 export 'bottomnav.dart';
 export 'picker_button.dart';
 export 'radio_group.dart';
+export 'checkbox_group.dart';
 export 'text.dart';
 export 'textfield.dart';
 export 'wrapper.dart';

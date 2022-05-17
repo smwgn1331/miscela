@@ -10,7 +10,7 @@ class MxRadioGroup extends StatefulWidget {
     required this.selected,
     required this.options,
     required this.label,
-    required this.errorText,
+    this.errorText,
     required this.onChanged,
     this.disabled,
     this.direction = Axis.vertical,
@@ -19,7 +19,7 @@ class MxRadioGroup extends StatefulWidget {
   final RxTarget selected;
   final List<Map<String, dynamic>> options;
   final String label;
-  final RxTarget<String> errorText;
+  final RxTarget<String>? errorText;
   final ValueChanged onChanged;
   final Rx<bool>? disabled;
   final Axis direction;
@@ -30,7 +30,7 @@ class MxRadioGroup extends StatefulWidget {
 
 class _MxRadioGroupState extends State<MxRadioGroup> {
   late dynamic _selected;
-  late String _errorText;
+  String _errorText = "";
   late bool _disabled;
 
   @override
@@ -83,8 +83,11 @@ class _MxRadioGroupState extends State<MxRadioGroup> {
     if (widget.disabled != null) {
       widget.disabled?.addSubscriber(_disabledChanged);
     }
-    _errorText = widget.errorText.value;
-    widget.errorText.addSubscriber(_errorTextChanged);
+
+    if (widget.errorText != null) {
+      _errorText = widget.errorText!.value;
+      widget.errorText!.addSubscriber(_errorTextChanged);
+    }
 
     _selected = widget.selected.value;
     widget.selected.addSubscriber(_selectedChanged);
@@ -98,10 +101,13 @@ class _MxRadioGroupState extends State<MxRadioGroup> {
       _disabled = widget.disabled!.value;
       widget.disabled?.addSubscriber(_disabledChanged);
     }
-    if (oldWidget.errorText != widget.errorText) {
-      oldWidget.errorText.removeSubscriber(_errorTextChanged);
-      _errorText = widget.errorText.value;
-      widget.errorText.addSubscriber(_errorTextChanged);
+
+    if (widget.errorText != null) {
+      if (oldWidget.errorText != widget.errorText) {
+        oldWidget.errorText!.removeSubscriber(_errorTextChanged);
+        _errorText = widget.errorText!.value;
+        widget.errorText!.addSubscriber(_errorTextChanged);
+      }
     }
     if (oldWidget.selected != widget.selected) {
       oldWidget.selected.removeSubscriber(_selectedChanged);
@@ -116,13 +122,21 @@ class _MxRadioGroupState extends State<MxRadioGroup> {
     if (widget.disabled != null) {
       widget.disabled?.removeSubscriber(_disabledChanged);
     }
-    widget.errorText.removeSubscriber(_errorTextChanged);
+
+    if (widget.errorText != null) {
+      widget.errorText!.removeSubscriber(_errorTextChanged);
+    }
+
     widget.selected.removeSubscriber(_selectedChanged);
     super.dispose();
   }
 
-  void _errorTextChanged() =>
-      setState(() => _errorText = widget.errorText.value);
+  void _errorTextChanged() {
+    if (widget.errorText != null) {
+      setState(() => _errorText = widget.errorText!.value);
+    }
+  }
+
   void _selectedChanged() => setState(() => _selected = widget.selected.value);
   void _disabledChanged() =>
       setState(() => _disabled = widget.disabled?.value ?? false);
