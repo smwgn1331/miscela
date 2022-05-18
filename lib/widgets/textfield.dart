@@ -9,7 +9,7 @@ import 'wrapper.dart';
 class MxTextField extends StatefulWidget {
   const MxTextField({
     Key? key,
-    required this.controller,
+    this.controller,
     this.label,
     this.errorText,
     this.onChanged,
@@ -26,7 +26,7 @@ class MxTextField extends StatefulWidget {
   final RxTarget<bool>? disabled;
   final ValueSetter? onChanged, onSubmitted;
   final ValueSetter? toggleVisible;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final TextInputType? textInputType;
   final TextInputAction? textInputAction;
   final String? label;
@@ -134,9 +134,9 @@ class _MxTextFieldState extends State<MxTextField> {
                               child: Material(
                                   child: InkWell(
                             onTap: () {
-                              widget.controller.clear();
+                              widget.controller?.clear();
                               if (widget.onChanged != null) {
-                                widget.onChanged!(widget.controller.text);
+                                widget.onChanged!(widget.controller?.text);
                               }
                             }, // button pressed
                             child: Icon(MdiIcons.close,
