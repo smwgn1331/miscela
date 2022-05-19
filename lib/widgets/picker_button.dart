@@ -7,16 +7,19 @@ import 'text.dart';
 class MxPickerButton extends StatefulWidget {
   const MxPickerButton({
     Key? key,
+    this.disabled,
     required this.iconData,
     required this.label,
+    required this.placeholder,
     required this.errorText,
-    this.disabled,
+    required this.display,
     required this.value,
     this.onTap,
     this.onClear,
   }) : super(key: key);
-  final String label;
+  final String label, placeholder;
   final RxTarget<String?> value;
+  final RxTarget<String?> display;
   final RxTarget<IconData> iconData;
   final RxTarget<String> errorText;
   final RxTarget<bool>? disabled;
@@ -56,7 +59,9 @@ class _MxPickerButtonState extends State<MxPickerButton> {
                 style: TextStyle(
                     fontWeight: FontWeight.w600, color: MxColors.slate[500]),
               ),
-              subtitle: MxText(widget.value, ifNull: "Pilih Ikon"),
+              subtitle: MxText(
+                  widget.display.value == null ? widget.value : widget.display,
+                  ifNull: widget.placeholder),
               trailing: _errorText.isNotEmpty
                   ? Icon(
                       MdiIcons.alertCircle,
