@@ -8,20 +8,22 @@ class MxPickerButton extends StatefulWidget {
   const MxPickerButton({
     Key? key,
     this.disabled,
-    required this.iconData,
+    this.rxIconData,
+    this.iconData,
     required this.label,
     required this.placeholder,
-    required this.errorText,
-    required this.display,
+    this.errorText,
+    this.display,
     required this.value,
     this.onTap,
     this.onClear,
   }) : super(key: key);
   final String label, placeholder;
   final RxTarget<String?> value;
-  final RxTarget<String?> display;
-  final RxTarget<IconData> iconData;
-  final RxTarget<String> errorText;
+  final RxTarget<String?>? display;
+  final RxTarget<IconData>? rxIconData;
+  final IconData? iconData;
+  final RxTarget<String>? errorText;
   final RxTarget<bool>? disabled;
   final VoidCallback? onTap, onClear;
 
@@ -60,7 +62,9 @@ class _MxPickerButtonState extends State<MxPickerButton> {
                     fontWeight: FontWeight.w600, color: MxColors.slate[500]),
               ),
               subtitle: MxText(
-                  widget.display.value == null ? widget.value : widget.display,
+                  widget.display?.value != null
+                      ? widget.display!
+                      : widget.value,
                   ifNull: widget.placeholder),
               trailing: _errorText.isNotEmpty
                   ? Icon(
@@ -93,17 +97,21 @@ class _MxPickerButtonState extends State<MxPickerButton> {
   @override
   void initState() {
     super.initState();
-    _errorText = widget.errorText.value;
-    widget.errorText.addSubscriber(_errorTextChanged);
+    _errorText = widget.errorText?.value ?? "";
+    if (widget.errorText != null) {
+      widget.errorText?.addSubscriber(_errorTextChanged);
+    }
 
     _disabled = widget.disabled?.value ?? false;
-
     if (widget.disabled != null) {
       widget.disabled?.addSubscriber(_disabledChanged);
     }
 
-    _iconData = widget.iconData.value;
-    widget.iconData.addSubscriber(_iconDataChanged);
+    _iconData =
+        widget.rxIconData?.value ?? widget.iconData ?? MdiIcons.formDropdown;
+    if (widget.rxIconData != null) {
+      widget.rxIconData?.addSubscriber(_iconDataChanged);
+    }
   }
 
   @override
@@ -115,16 +123,23 @@ class _MxPickerButtonState extends State<MxPickerButton> {
         widget.disabled?.addSubscriber(_disabledChanged);
       }
     }
-    if (oldWidget.iconData != widget.iconData) {
-      oldWidget.iconData.removeSubscriber(_iconDataChanged);
-      _iconData = widget.iconData.value;
-      widget.iconData.addSubscriber(_iconDataChanged);
+
+    if (widget.rxIconData != null) {
+      if (oldWidget.rxIconData != widget.rxIconData) {
+        oldWidget.rxIconData?.removeSubscriber(_iconDataChanged);
+        _iconData = widget.rxIconData!.value;
+        widget.rxIconData?.addSubscriber(_iconDataChanged);
+      }
     }
-    if (oldWidget.errorText != widget.errorText) {
-      oldWidget.errorText.removeSubscriber(_errorTextChanged);
-      _errorText = widget.errorText.value;
-      widget.errorText.addSubscriber(_errorTextChanged);
+
+    if (widget.errorText != null) {
+      if (oldWidget.errorText != widget.errorText) {
+        oldWidget.errorText?.removeSubscriber(_errorTextChanged);
+        _errorText = widget.errorText!.value;
+        widget.errorText?.addSubscriber(_errorTextChanged);
+      }
     }
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -133,17 +148,22 @@ class _MxPickerButtonState extends State<MxPickerButton> {
     if (widget.disabled != null) {
       widget.disabled?.removeSubscriber(_disabledChanged);
     }
-    widget.iconData.removeSubscriber(_iconDataChanged);
-    widget.errorText.removeSubscriber(_errorTextChanged);
+    if (widget.disabled != null) {
+      widget.rxIconData?.removeSubscriber(_iconDataChanged);
+    }
+    if (widget.errorText != null) {
+      widget.errorText?.removeSubscriber(_errorTextChanged);
+    }
     super.dispose();
   }
 
   void _errorTextChanged() {
-    setState(() => _errorText = widget.errorText.value);
+    setState(() => _errorText = widget.errorText?.value ?? "");
   }
 
   void _disabledChanged() =>
       setState(() => _disabled = widget.disabled?.value ?? false);
 
-  void _iconDataChanged() => setState(() => _iconData = widget.iconData.value);
+  void _iconDataChanged() => setState(() => _iconData =
+      widget.rxIconData?.value ?? widget.iconData ?? MdiIcons.formDropdown);
 }
