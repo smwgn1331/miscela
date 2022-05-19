@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:miscela/common/all.dart';
 
 import '../reactive/target.dart';
-import 'text.dart';
 
-class MxPickerButton extends StatefulWidget {
+class MxPickerButton<T extends Object> extends StatefulWidget {
   const MxPickerButton({
     Key? key,
     this.disabled,
@@ -19,7 +18,7 @@ class MxPickerButton extends StatefulWidget {
     this.onClear,
   }) : super(key: key);
   final String label, placeholder;
-  final RxTarget<String?> value;
+  final RxTarget<dynamic> value;
   final RxTarget<String?>? display;
   final RxTarget<IconData>? rxIconData;
   final IconData? iconData;
@@ -35,6 +34,8 @@ class _MxPickerButtonState extends State<MxPickerButton> {
   late bool _disabled;
   late IconData _iconData;
   late String _errorText;
+  dynamic _value;
+  String? _display;
 
   @override
   build(BuildContext context) {
@@ -61,11 +62,9 @@ class _MxPickerButtonState extends State<MxPickerButton> {
                 style: TextStyle(
                     fontWeight: FontWeight.w600, color: MxColors.slate[500]),
               ),
-              subtitle: MxText(
-                  widget.display?.value != null
-                      ? widget.display!
-                      : widget.value,
-                  ifNull: widget.placeholder),
+              subtitle: Text(
+                _display ?? _value ?? widget.placeholder,
+              ),
               trailing: _errorText.isNotEmpty
                   ? Icon(
                       MdiIcons.alertCircle,
@@ -102,6 +101,14 @@ class _MxPickerButtonState extends State<MxPickerButton> {
       widget.errorText?.addSubscriber(_errorTextChanged);
     }
 
+    _value = widget.value.value;
+    widget.value.addSubscriber(_valueChanged);
+
+    _display = widget.display?.value;
+    if (widget.display != null) {
+      widget.value.addSubscriber(_displayTextChanged);
+    }
+
     _disabled = widget.disabled?.value ?? false;
     if (widget.disabled != null) {
       widget.disabled?.addSubscriber(_disabledChanged);
@@ -132,6 +139,20 @@ class _MxPickerButtonState extends State<MxPickerButton> {
       }
     }
 
+    if (oldWidget.value != widget.value) {
+      oldWidget.value.removeSubscriber(_valueChanged);
+      _value = widget.value.value;
+      widget.value.addSubscriber(_valueChanged);
+    }
+
+    if (widget.display != null) {
+      if (oldWidget.display != widget.display) {
+        oldWidget.display?.removeSubscriber(_displayTextChanged);
+        _display = widget.display!.value;
+        widget.display?.addSubscriber(_displayTextChanged);
+      }
+    }
+
     if (widget.errorText != null) {
       if (oldWidget.errorText != widget.errorText) {
         oldWidget.errorText?.removeSubscriber(_errorTextChanged);
@@ -145,6 +166,12 @@ class _MxPickerButtonState extends State<MxPickerButton> {
 
   @override
   void dispose() {
+    widget.value.removeSubscriber(_valueChanged);
+
+    if (widget.display != null) {
+      widget.display?.removeSubscriber(_displayTextChanged);
+    }
+
     if (widget.disabled != null) {
       widget.disabled?.removeSubscriber(_disabledChanged);
     }
@@ -157,8 +184,18 @@ class _MxPickerButtonState extends State<MxPickerButton> {
     super.dispose();
   }
 
+  void _valueChanged() => setState(() => _value = widget.value.value);
+
+  void _displayTextChanged() {
+    if (widget.display != null) {
+      setState(() => _display = widget.display?.value ?? "");
+    }
+  }
+
   void _errorTextChanged() {
-    setState(() => _errorText = widget.errorText?.value ?? "");
+    if (widget.errorText != null) {
+      setState(() => _errorText = widget.errorText?.value ?? "");
+    }
   }
 
   void _disabledChanged() =>
