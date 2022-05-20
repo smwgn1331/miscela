@@ -25,7 +25,7 @@ class MxAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: Miscela.svc<Navigation>().back,
                 icon: Icon(
                   MdiIcons.arrowLeft,
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  color: Theme.of(context).colorScheme.primary,
                 ))
             : null,
         backgroundColor: MxColors.transparent,
