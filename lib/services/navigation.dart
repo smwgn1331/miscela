@@ -14,7 +14,7 @@ class Navigation {
           .push(MaterialPageRoute(builder: (context) => page));
 
   back({dynamic result}) =>
-      Navigator.of(navigatorKey.currentState!.context).pop(result ?? false);
+      Navigator.of(navigatorKey.currentState!.context).pop(result);
 
   Future replaceWith(String path, {Object? arguments}) async =>
       Navigator.of(navigatorKey.currentState!.context)
