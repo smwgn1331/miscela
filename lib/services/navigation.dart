@@ -84,6 +84,19 @@ class Navigation {
               ),
           context: navigatorKey.currentState!.context);
 
+  ScaffoldFeatureController snackBar(
+    Widget content, {
+    SnackBarAction? action,
+    Color? backgroundColor,
+  }) {
+    return ScaffoldMessenger.of(navigatorKey.currentState!.context)
+        .showSnackBar(SnackBar(
+      content: content,
+      action: action,
+      backgroundColor: backgroundColor,
+    ));
+  }
+
   static parseRoutes(Map<String, dynamic> routes) =>
       routes.map<String, Widget Function(BuildContext)>(
           (key, value) => MapEntry(key, (context) => value));
