@@ -59,7 +59,7 @@ class _MxRadioGroupState extends State<MxRadioGroup> {
                           value: e['value'],
                           selected:
                               _selected.toString() == e['value'].toString(),
-                          onChanged: (value) => widget.disabled?.value == true
+                          onChanged: (value) => widget.disabled?.value != true
                               ? widget.onChanged(value)
                               : null,
                         ))
